@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { computeRandomSecret, isValidGuess, computeResult } from './game-functions';
+import { computeRandomSecret, isValidGuess, computeResult, hasWon } from './game-functions';
 import 'milligram';
 import './App.css';
 
@@ -141,10 +141,19 @@ function GuessTable(props) {
 function GameOver(props) {
   let {reset} = props;
   let {secret} = props;
+  let {won} = props;
+  let message = "";
+
+  if (won) {
+    message = "You Won!"  
+  } else {
+    message = "Sorry, you lost!"
+  }
+
   return (
     <div>
       <h1>Bulls and Cows</h1>
-      <h4>Game Over!</h4>
+      <h4>{message}</h4>
       <p className="center">The secret was: {secret}</p>
       <button id="new-game" onClick={() => reset()}>New Game</button>
     </div>
@@ -180,20 +189,27 @@ function App({secret}) {
     });
   }
 
-  if(state.guesses.length <= 8) {
-    //Game not over
+  //Game Won
+  if (hasWon(state)) {
     return (<div>
-      <h1>Bulls and Cows</h1>
-      <p className="center">Secret: {state.secret}</p>
-      <Input makeGuess={makeGuess} reset={reset}/>
-      <GuessTable secret={state.secret} guesses={state.guesses}/>
+      <GameOver reset={reset} secret={state.secret} won={true}/>
     </div>);
-  } else {
-    //Game over
+  }
+
+  //Game Over
+  if(state.guesses.length > 7) {
     return (<div>
-      <GameOver reset={reset} secret={state.secret}/>
+      <GameOver reset={reset} secret={state.secret} won={false} />
     </div>)
   }
+
+  //If game not over or won
+  return (<div>
+    <h1>Bulls and Cows</h1>
+    <p className="center">Secret: {state.secret}</p>
+    <Input makeGuess={makeGuess} reset={reset} />
+    <GuessTable secret={state.secret} guesses={state.guesses} />
+  </div>);
 }
 
 export default App;

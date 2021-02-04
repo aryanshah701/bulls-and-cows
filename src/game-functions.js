@@ -44,9 +44,6 @@ export function computeResult(secret, guess) {
   let secretChars = secret.split("");
   let guessChars = guess.split("");
 
-  //console.log(secretChars)
-  //console.log(guessChars)
-
   //Searching for Bulls
   let bulls = [];
   for (let i = 0; i < secretChars.length; i++) {
@@ -72,4 +69,11 @@ export function computeResult(secret, guess) {
   console.log("Cows: " + cows);
   console.log("Bulls: " + bulls);
   return opString;
+}
+
+export function hasWon(state) {
+  let secret = state.secret;
+  let guesses = state.guesses;
+  let lastGuess = guesses[guesses.length - 1];
+  return secret === lastGuess;
 }
