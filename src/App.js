@@ -32,6 +32,7 @@ function Input(props) {
             type="text"
             value={inputString}
             onChange={updateText}
+            onKeyPress={(ev) => {if (ev.key === "Enter") {makeGuess(inputString)}}}
           >
           </input>
         </div>
@@ -160,6 +161,27 @@ function GameOver(props) {
   );
 }
 
+function Rules() {
+  return (
+    <div class="container rules">
+      <h4>Rules and Gampeplay</h4>
+      <ul>
+        <li>Only numbers can be entered into the input box.</li>
+        <li>No duplicate numbers can be entered into the input box.</li>
+        <li>
+          Each guess has a result indicating the number of cows and bulls in the guess.
+          <ul>
+            <li>A cow is a number present in the secret but in the wrong position.</li>
+            <li>A bull is a number present in the secret and in the right position.</li>
+          </ul>
+        </li>
+        <li>If the secret number isn't guessed in 8 trials, you loose.</li>
+        <li>Press the reset button to reset the game(note the secret will also reset).</li>
+      </ul>
+    </div>
+  );
+}
+
 function App({secret}) {
   const [state, setState] = useState({
     secret: computeRandomSecret(),
@@ -204,12 +226,23 @@ function App({secret}) {
   }
 
   //If game not over or won
-  return (<div>
-    <h1>Bulls and Cows</h1>
-    <p className="center">Secret: {state.secret}</p>
-    <Input makeGuess={makeGuess} reset={reset} />
-    <GuessTable secret={state.secret} guesses={state.guesses} />
-  </div>);
+  return (
+    <div>
+      <h1>Bulls and Cows</h1>
+      <div class="container">
+        <div class="row">
+          <div class="column column-30">
+            <Rules />
+          </div>
+          <div class="column column-70">
+            <p className="center">Secret: {state.secret}</p>
+            <Input makeGuess={makeGuess} reset={reset} />
+            <GuessTable secret={state.secret} guesses={state.guesses} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default App;
