@@ -182,10 +182,11 @@ function Rules() {
   );
 }
 
-function App({secret}) {
+function App() {
   const [state, setState] = useState({
     secret: computeRandomSecret(),
     guesses: [],
+    revealSecret: false
   });
 
   //Function to handle making a guess
@@ -200,6 +201,7 @@ function App({secret}) {
     setState({
       secret: state.secret,
       guesses: newGuesses,
+      revealSecret: state.revealSecret,
     });
   }
 
@@ -208,7 +210,17 @@ function App({secret}) {
     setState({
       secret: computeRandomSecret(),
       guesses: [],
+      revealSecret: false,
     });
+  }
+
+  //Function to toggle reveal secret
+  function toggleSecret() {
+    setState({ 
+      secret: state.secret,
+      guesses: state.guesses,
+      revealSecret: !state.revealSecret,
+    })
   }
 
   //Game Won
@@ -226,6 +238,11 @@ function App({secret}) {
   }
 
   //If game not over or won
+  let secret = "";
+  if (state.revealSecret) {
+    secret = state.secret;
+  }
+
   return (
     <div>
       <h1>Bulls and Cows</h1>
@@ -235,7 +252,8 @@ function App({secret}) {
             <Rules />
           </div>
           <div class="column column-70">
-            <p className="center">Secret: {state.secret}</p>
+            <button id="reveal" onClick={() => toggleSecret()}>Reveal Secret</button>
+            <p className="center">Secret: {secret}</p>
             <Input makeGuess={makeGuess} reset={reset} />
             <GuessTable secret={state.secret} guesses={state.guesses} />
           </div>
