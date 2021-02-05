@@ -32,12 +32,12 @@ function Input(props) {
             type="text"
             value={inputString}
             onChange={updateText}
-            onKeyPress={(ev) => {if (ev.key === "Enter") {makeGuess(inputString)}}}
+            onKeyPress={(ev) => {if (ev.key === "Enter") {makeGuess(inputString); setInputString("");}}}
           >
           </input>
         </div>
         <div className="column column-20">
-          <button onClick={() => makeGuess(inputString)}>Guess</button>
+          <button onClick={() => {makeGuess(inputString); setInputString("");}}>Guess</button>
         </div>
         <div className="column column-20">
           <button onClick={() => {reset(); setInputString("");}}>Reset</button>
